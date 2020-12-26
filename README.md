@@ -6,16 +6,12 @@ Hyper-Text Query Language (HTQL) is a language for the querying and transformati
 - Retrieve HTML page through HTTP protocol
 - Modify HTML pages
 
-## How to install
+## Installation
 
 Run: 
 ```
 python setup.py install
 ```
-
-## Homepage
-
-  http://htql.net
   
 ## Examples
 
@@ -31,9 +27,14 @@ for url, text in htql.query(page, query):
     print(url, text)
 ```
 
-## Manual
+## Manuals
 
-  http://htql.net/htql-manual.pdf
-  
+- [Hyper-Text Query Language (HTQL)](http://htql.net/htql-manual.pdf)
+- [HTQL Python Interface](http://htql.net/htql-python-manual.pdf)
+
+## Homepage
+
+  http://htql.net
+
 ## Citation
 - Liangyou Chen. `Ad Hoc Integration and Querying of Heterogeneous Online Distributed Databases`. 2004. Ph.D. Dissertation, Department of Computer Science & Engineering, Mississippi State University.
