@@ -6,14 +6,14 @@ Hyper-Text Query Language (HTQL) is a language for the querying and transformati
 - Retrieve HTML page through HTTP protocol
 - Modify HTML pages
 
-## Installation
+## Python Installation
 
 Run: 
 ```
 python setup.py install
 ```
   
-## Examples
+## Python Examples
 
 A simple example to extract url and text from links.
 
