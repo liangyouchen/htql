@@ -32,9 +32,9 @@ for url, text in htql.query(page, query):
 - [Hyper-Text Query Language (HTQL)](http://htql.net/htql-manual.pdf)
 - [HTQL Python Interface](http://htql.net/htql-python-manual.pdf)
 
-## Homepage
+## Home
 
-  http://htql.net
+  [http://htql.net](http://htql.net)
 
 ## Citation
 - Liangyou Chen. `Ad Hoc Integration and Querying of Heterogeneous Online Distributed Databases`. 2004. Ph.D. Dissertation, Department of Computer Science & Engineering, Mississippi State University.
