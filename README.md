@@ -9,7 +9,9 @@ Hyper-Text Query Language (HTQL) is a language for the querying and transformati
 ## How to install
 
 Run: 
-> python setup.py install</code>
+```
+python setup.py install
+```
 
 ## Homepage
 
