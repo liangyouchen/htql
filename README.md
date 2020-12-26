@@ -27,7 +27,7 @@ for url, text in htql.query(page, query):
     print(url, text)
 ```
 
-An example to parse state and zip from US address using HTQL regular expression:
+Another example to parse state and zip from US address using HTQL regular expression:
 
 ```
 import htql; 
