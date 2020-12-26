@@ -1,0 +1,396 @@
+# Linux includes: 
+/home/tingtone/python/Python-2.6.8/Include/
+/usr/include/python2.4/
+/home/tingtone/python/Python-3.3.2/Include/
+/home/tingtone/python/Python-2.7.5/Include/
+
+# Install python
+tar xvfz Python2.7.5.tgz 
+vi README
+./configure
+make
+--> this produce python in the current directory
+
+# === make HTQL ===
+clear directory: D:\cly\doc\cly\Proj\LaWeb\Output\pyhtql
+run make_c_source.py
+
+# --- on server
+cp setup.py24 setup.py
+make clean
+rm build/lib.linux-x86_64-2.4/htql.*
+python setup.py install
+cd build/lib.linux-x86_64-2.4/
+python ../../test_basic_regex.py
+cd ../../
+
+cp setup.py27 setup.py
+make clean
+rm build/lib.linux-x86_64-2.7/htql.*
+/home/tingtone/python/Python-2.7.5/python setup.py install
+cd build/lib.linux-x86_64-2.7/
+/home/tingtone/python/Python-2.7.5/python ../../test_basic_regex.py
+cd ../../
+
+cp setup.py26 setup.py
+make clean
+rm build/lib.linux-x86_64-2.6/htql.*
+/home/tingtone/python/Python-2.6.8/python setup.py install
+cd build/lib.linux-x86_64-2.6/
+/home/tingtone/python/Python-2.6.8/python ../../test_basic_regex.py
+cd ../../
+
+cp setup.py32 setup.py
+make clean
+rm build/lib.linux-x86_64-3.3/htql.*
+/home/tingtone/python/bin/python3.3 setup.py install
+cd build/lib.linux-x86_64-3.3/
+/home/tingtone/python/bin/python3.3 ../../test_basic_regex.py
+cd ../../
+
+# ====
+NOIWEB
+
+
+# ==== test htql =====
+import htql; 
+page="<a href=a.html>1</a><a href=b.html>2</a><a href=c.html>3</a>";
+query="<a>:href,tx";
+for url, text in htql.HTQL(page, query): 
+    print(url, text);
+
+a=htql.query(page, query);
+b=htql.results(use_index=1); 
+
+a=htql.HTQL();
+a.query(page, query)
+
+query="<a>:href,tx";
+
+
+# ==== test browser ====
+import htql;
+a=htql.Browser(); 
+b=a.goUrl("http://www.bing.com/");
+c=a.goForm("<form>1", {"q":"test"});
+for d in htql.HTQL(c[0], "<a (tx like '%test%')>"): 
+    print(d);
+
+e=a.click("<a (tx like '%test%' and not (href like '/search%'))>1");
+
+a=htql.Browser(2)
+b=a.connectBrowser('localhost', 8080);
+b=a.goUrl('http://techcrunch.com/2012/05/15/facebook-lightbox/');
+c=a.useFrame(8);
+d=a.getUpdatedPage();
+htql.query(d[0], "<div norecur (class='postText')>:tx");
+
+
+a=htql.Browser(2); 
+a.goUrl("http://www.google.com/trends");
+b=a.goForm("<form>1", {"q":"iPad 2"});
+b=a.getUpdatedPage();
+b=a.runCommand("getUpdatedPage()");
+link=[x for x in htql.HTQL(b, "<a (tx like '%CSV with fixed scaling%')>:href &url", "http://www.google.com/trends")]; 
+c=a.runFunction("saveUrlFile('" + link[0] + "', 'c:\\test.txt')"); 
+
+import htql;
+a=htql.Browser(2); 
+b=a.connectBrowser('localhost', 8080);
+c=a.runFunction("openRobot('D:\\cly\\data2\\irb\\pass.irb', 'Local', 'pass')");
+c=a.runFunction("runTask('Local')");
+c=a.runFunction("openRobot('D:\\cly\\data2\\irb\\yyp2.irb', 'Local')");
+c=a.runFunction("runTask('Local')");
+
+# === test alignment	
+import htql;
+a=htql.Tools(); 
+
+text=["This is a dog in the garden", "This dog is in the garden", "I saw this dog in the garden"]; 
+
+b=a.cluster(text);
+c=a.getAlignment();
+for x in c: print(x);
+
+
+execfile("test_basic_regex.py");
+
+
+
+import htql; 
+a=htql.RegEx(); 
+a.reSearchStr('abcba', '[ab]+', case=False, overlap=False); 
+#['ab', 'ba']
+a.reSearchStr('ac ac 12 dd', r'\b[\w\d]+\b')
+
+import htql; 
+a=htql.RegEx(); 
+a.setNameSet('s', ['<is/VB.*><a/.*>','<are/VB.*>']);
+#	2L
+a.reSearchList([('is','VB'), ('a', 'DT')], '&[s:s]');
+#	[[('is', 'VB'), ('a', 'DT')]]
+a.reSearchList([('are','VB')], '&[s:s]');
+#	[[('are', 'VB')]]
+a.reSearchList([('is','VB')], '&[s:s]');
+#	[]
+a.reSearchList([('this','DT'), ('is','VB'), ('a', 'VB'), ('are', 'VB'), ('test', 'NN')], '&[s:s]+');
+#	[[('is', 'VB'), ('a', 'VB'), ('are', 'VB')]]
+a.reSearchStr('this is a test', '&[s:s(is|es)].*&[s:s]');
+#	['is is a tes']
+a.setNameSet('s', ['is', 'es'])
+#	2L
+a.reSearchStr('this is a test', '&[s:s]');
+#	['is', 'is', 'es']
+a.reSearchStr('this is a test', '&[s:s].*&[s:s]');
+#	['is is a tes']
+a.reSearchStr('thisises a test', '&[s:s]+');
+#	['isises', 'es']
+a.reSearchStr('thises', 'th[^&[s:s]]*es')
+#	[]
+a.reSearchStr('thxxes', 'th[^&[s:s]]*es')
+#	['thxxes']
+import htql;
+a=htql.RegEx(); 
+a.setNameSet('garden', ['tree', 'tree cricket']); 
+a.reSearchList([('tree', 'NN'), ('in', 'IN')], '&[ws:garden]', overlap=0);
+#[[('tree', 'NN')]]
+a.setNameSet('garden', ['tree', 'tree in', 'tree in cricket']); 
+a.reSearchList([('tree', 'NN'), ('in', 'IN'), ('test', 'NN')], '&[ws:garden]', overlap=0);
+#[[('tree', 'NN'), ('in', 'IN')]]
+
+
+a.setNameSet('s', ['is', 'i'])
+a.reSearchStr('this is a test', '&[s:s]');
+a.reSearchStr('this is a test', r'(\W|^)&[s:s]', useindex=True) 
+
+[{'sent': [('is', 'VB'), ('a', 'DT'), ('this', 'DT'), ('a', 'DT1'), ('this', 'DT')], 'result': [[('is', 'VB'), ('a', 'DT'), ('this', 'DT')], [('this', 'DT')]],'var': {'s': ['<is/VB.*><a/.*>', '<is/VB.*>', '<this/DT>']}, 'reg': '&[s:s]+'}]
+a.setNameSet('s',['<is/VB.*><a/.*>', '<is/VB.*>', '<this/DT>'])
+a.reSearchList([('is', 'VB'), ('a', 'DT'), ('this', 'DT'), ('a', 'DT1'), ('this', 'DT')],'&[s:s]+',case=False,overlap=False,useindex=False);
+  ..Returned: [[('is', 'VB')], [('this', 'DT')], [('this', 'DT')]]
+..Expecting: [[('is', 'VB'), ('a', 'DT'), ('this', 'DT')], [('this', 'DT')]]
+
+[{'sent': [('tree', 'NN'), ('in', 'IN'), ('test', 'NN')], 'result': [[('tree', 'NN'), ('in', 'IN')]], 'var': {'garden': ['tree', 'tree in', 'tree in cricket']}, 'reg': '&[ws:garden]'}]
+a.setNameSet('garden',['tree', 'tree in', 'tree in cricket'])
+a.reSearchList([('tree', 'NN'), ('in', 'IN'), ('test', 'NN')],'&[ws:garden]',case=False,overlap=False,useindex=False);
+  ..Returned: [[('tree', 'NN')]]
+..Expecting: [[('tree', 'NN'), ('in', 'IN')]]
+
+
+
+import htql; 
+a=htql.RegEx(); 
+a.setNameSet('s', ['<is/VB.*><a/.*>','<is/VB.*>', '<this/DT>']);
+#	3L
+a.reSearchList([('is','VB'), ('a', 'DT'),('this', 'DT'),('a', 'DT1'),('this', 'DT'),], '&[s:s]+');
+#[[('is', 'VB'), ('a', 'DT'), ('this', 'DT')], [('this', 'DT')]]
+a.reSearchList([('is','VB'), ('a', 'DT'),('b', 'DT'),('this', 'DT'),], '[^&[s:s]]+'); # NOT 
+#[[('a', 'DT'), ('b', 'DT')]]
+
+a.setNameSet('s', ['ab c', 'dc']); 
+a.setExprList('&[ws:s]+', case=False, keep=True);
+pos=[('Ab', 'DT'), ('c', 'NN'), ('dc', 'NN'), ('abc', 'JJ'), ('stricture', 'NN')]
+a.reExprSearch(pos, overlap=0);
+# [[('Ab', 'DT'), ('c', 'NN'), ('dc', 'NN')]]
+pos=[('Ab', 'DT'), ('c', 'NN'), ('dc', 'NN'), ('abc', 'JJ')]
+a.setExprList('&[ws:s(ab c|dc)][^&[ws:s]]+', case=False, keep=True);
+a.reExprSearch(pos, overlap=0);
+# [[('dc', 'NN'), ('abc', 'JJ')]]
+a.reSearchStr('<A href="KML/Wetlands-Data.kml">Wetlands-Data.kml</A>', "href=(.*).kml")
+
+import htql; 
+a=htql.RegEx(); 
+a.reSearchStr('abc', "(.*)c")
+a.reSearchStr('abc', ".*c")
+
+import htql
+a=htql.RegEx()
+b=a.reSearchStr('ab', '^', useindex=True)
+
+items='|'.join([str(i) for i in range(10000)]); 
+text1=' '.join([str(i) for i in range(1000)]); 
+from datetime import time, datetime
+t1=datetime.now();
+a.reSearchStr(text1, '\s(%s)\s'%items, overlap=True, case=False, useindex=False); 
+t2=datetime.now();
+print(t2-t1)
+
+a.reSearchList(['123', 'a', '13129', '2', '21', '31', '3232'], '<%s>{3}'%items, overlap=True, case=False, useindex=False); 
+
+
+
+import nltk;
+import htql;
+brown=nltk.corpus.brown.words();
+a=htql.Tools();
+a.reSearchList(brown[0:20], '<The>')
+
+
+import htql; 
+a=htql.Browser(2); 
+a.connectBrowser('localhost', 2401, False); 
+a.runFunction("runTask('regex')"); 
+a.runFunction("getVariable('a')");
+a.runFunction("a");
+
+
+import htql; 
+a=htql.Dict(); 
+a.searchKeys('this is cc test', {'This is':123, 'This is bb':'d', 'This is just':'x'} );
+# [('This is', 123)]
+a.searchKeys('this is a test', {'is': 'A', 'test':'B', 'A':'x', 'This':'y'} );
+# [('This', 'y'), ('is', 'A'), ('A', 'x'), ('test', 'B')]
+a.searchKeys('this is a test', {'is': 'A', 'test':'B', 'A':'x', 'This':'y'}, order='value' );
+# [('is', 'A'), ('test', 'B'), ('A', 'x'), ('This', 'y')]
+a.searchKeys('this is a test', {'is': 'A', 'test':'B', 'A':'x', 'This':'y'}, order='key' );
+# [('A', 'x'), ('is', 'A'), ('test', 'B'), ('This', 'y')]
+a.searchKeys('this is, just a test', {'This is':123, 'This is bb':'d', 'This is just':'x'} );
+# [('This is', 123)]
+a.searchKeys('this is just a test', {'This is':123, 'This is bb':'d', 'This is just':'x'} );
+# [('This is just', 'x')]
+import htql; 
+a=htql.Dict(case=True); 
+a.searchKeys('this is a test', {'is': 'A', 'test':'B', 'A':'x', 'This':'y'}, order='key' );
+# [('is', 'A'), ('test', 'B')]
+a=htql.Dict(case=True, spaces='_, '); 
+a.searchKeys('this,is_ a test', {'is': 'A', 'test':'B', 'A':'x', 'This':'y'}, order='key' );
+# [('is', 'A'), ('test', 'B')]
+
+
+
+execfile('product_functions.py'); 
+csvfile='D:/sears/SYW-Rich-Content/SYW Tags - Brands.txt'; 
+data=read_file(csvfile); 
+
+import htql; 
+d=htql.query(data, "/'\n'/{n=/'\t'/1 &trim('\"'); t=/'\t'/2 &trim() } } ")
+
+import htql; 
+e=htql.Dict(); 
+e.setDict({'test':'t', 'AT&T Cisco':'a', 'HEWLETT-Packard':'c'}); 
+e.searchKeys('Apple AT&T Cisco Dell EMC Facebook test Google Hewlett-Packard, IBM');
+
+
+
+workspace='blog-electronics'
+execfile('load_data.py');  
+pop, rare, pos=load_var('d:\\test', has_path=True);
+import htql; 
+a=htql.RegEx(); 
+a.setNameSet('pop', pop, keep=True); 
+a.setNameSet('rare', rare, keep=True); 
+a.setExprList('&[s:pop]+&[s:rare]+|&[s:rare]+&[s:pop]+', case=False, keep=True);
+for i in range(len(pos)): 
+	print(i);
+	a.reExprSearch(pos[i], overlap=0);
+
+a.reExprSearch(pos[0], overlap=0);
+a.reExprSearch([('me', 'PRP'), ('!', '.')])
+
+
+import htql; 
+a=htql.Align(); 
+a.align('my test 1', 'test 2'); 
+a.minAlign('my test', ['my test 1', 'a test', 'test 2']); 
+a.minAlign('my test', ['my Test 1', 'a test', 'test 2'], case=False, get_align=True); 
+a.find('abdc', 'sdadbcdxxx', case=False, whole_x=True);
+a.alignText('This is a test', 'and that is test'); 
+
+os.chdir(JOB_SCRIPT_DIR)
+execfile('tools/product_functions.py');
+page1=read_file('../tmp/url_page1.html') 
+page2=read_file('../tmp/url_page2.html') 
+p=a.alignText(page1, page2, 'html'); 
+
+for i in range(len(p[0])):
+  if p[0][i] != p[1][i]:
+    print(i, p[0][i], p[1][i]); 
+
+c=a.alignText('This is a test', 'and that is test', 'str');  
+''.join([x or '_' for x in c['X']])
+''.join([x or '_' for x in c['Y']])
+
+
+
+import csv
+reader=csv.reader(open("D:/cly/data2/irb/mygofer-food-v2.txt", 'rb'));
+rows=[r for r in reader]; 
+r1=rows[1]; 
+results=[]; 
+for i, r2 in enumerate(rows[2:]): 
+	s, pair=a.align(r1[0], r2[0]); 
+	results.append((s, pair)); 
+	print('%d/%d'%(i, len(rows))); 
+	#print(s); 
+	#print(pair[0]); 
+	#print(pair[1]); 
+
+results1=sorted(results, key=lambda k: k[0]/len(k[1][0])); 
+
+
+import csv
+reader=csv.reader(open("D:/cly/data2/irb/mygofer-food-v2.txt", 'rb'));
+rows=[r[0] for r in reader]; 
+import htql; 
+a=htql.Align(); 
+a.minAlign(rows[1], rows[2:]); 
+results=[];
+for i in range(1, len(rows)):
+	r=a.minAlign(rows[i], rows[1:]); 
+	results.append(r); 
+	print(r); 
+
+# demo for NaiveBayes 
+data=[
+{'f1':'a', 'f2':1, 'outcome':0},
+{'f1':'a', 'f2':2, 'outcome':0},
+{'f1':'c', 'f2':2, 'outcome':1},
+{'f1':'c', 'f2':1, 'outcome':1},
+]
+import htql
+a=htql.NaiveBayes()
+a.fit(data, ['f1','f2'], 'outcome')
+a.predProba(data[0])
+# {0L: 0.8333287512986108, 1L: 0.16667124870139022}
+s=a.dumpXML()
+a.loadXML(s)
+s1=a.dumpXML()
+
+data=[
+['a', 1, 0], 
+['a', 2, 0], 
+['c', 2, 1], 
+['c', 1, 1],
+]
+a.fit(data, ['f1','f2'], 'outcome')
+a.predProba(data[0])
+# {0L: 0.8333538356446588, 1L: 0.16664616435533974}
+
+
+
+# demo to parse address
+
+import htql; 
+address = '88-21 64th st , Rego Park , New York 11374'
+states=['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 
+	'Delaware', 'District Of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 
+	'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 
+	'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 
+	'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 
+	'Oregon', 'PALAU', 'Pennsylvania', 'PUERTO RICO', 'Rhode Island', 'South Carolina', 'South Dakota', 
+	'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 
+	'Wyoming']; 
+
+a=htql.RegEx(); 
+a.setNameSet('states', states);
+state_zip1=a.reSearchStr(address, "&[s:states][,\s]+\d{5}", case=False)[0]; 
+# state_zip1 = 'New York 11374'
+state_zip2=a.reSearchList(address.split(), "&[ws:states]<[,]>?<\d{5}>", case=False)[0]; 
+# state_zip2 = ['New', 'York', '11374']
+
+
+text=''
+import htql
+reg = htql.RegEx()
+reg.setNameSet('firstname', ['Gerd','Kolbenschlag','PO', 'creation'] );
+matches=reg.reSearchStr(text, '(\\.|\n|^)\s*&[s:firstname]\\s+(\\w?\\.?\\s+)?(\\w+)(\\W|$)', case=False, group=True, keep=False, useindex=True)
+
