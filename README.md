@@ -1,6 +1,6 @@
 # HTQL - the Hyper-Text Query Language
 
-Hyper-Text Query Language (HTQL) is a language for the querying and transformation of HTML, XML and plain text documents. HTQL is developed in C++ with fast and efficient data extraction algorithms. HTQL can be used to:
+The Hyper-Text Query Language (HTQL) is a language for the querying and transformation of HTML, XML and plain text documents. HTQL is developed in C++ with fast and efficient data extraction algorithms. HTQL can be used to:
 
 - Extract data from HTML pages
 - Retrieve HTML page through HTTP protocol
