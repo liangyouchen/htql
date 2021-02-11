@@ -2356,7 +2356,8 @@ int tStrOp::splitUTF8(const char* text, ReferLinkHeap* results){
 			}
 			i+=1;
 			j=i;
-		}
+		}else
+			i+=1;
 	}
 	if (i>j){
 		word.Set((char*) text+j, i-j, false); 
