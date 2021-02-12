@@ -7,7 +7,7 @@ pyver_id = 'Python32'
 if sys.version_info.major < 3: 
     if sys.version_info.major == 2 and sys.version_info.minor >=6: 
         # for python 2.6 and 2.7
-        pyver_id = 'Python24'
+        pyver_id = 'Python27'
     else:
         # for python 2.4 and 2.5
         pyver_id = 'Python24'
