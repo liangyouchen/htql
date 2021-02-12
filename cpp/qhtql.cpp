@@ -1302,28 +1302,29 @@ int	HTQLTagSelection::setVariableValues(HTQLScope* CurrTag){
 			var->Value.Set(CurrTag->S.P, len, true);
 			var->Data = CurrTag->SourceOffset;
 		} else if (!var->Name.Cmp("xx",2, false)){//text after the end-tag
+			long len=0;
 			if (CurrTag->EnclosedTag && CurrTag->EnclosedTag->NextTag){
 				HTQLScope* next_tag=nextTag(CurrTag->EnclosedTag);
 				if (next_tag){
-					long len = next_tag->S.P - CurrTag->EnclosedTag->S.P;
+					len = next_tag->S.P - CurrTag->EnclosedTag->S.P;
 					if (len >= CurrTag->EnclosedTag->S.L) 
 						len -= CurrTag->EnclosedTag->S.L;
 					else 
 						len=0;
 				}else{
 					len=0;
-					for (p=CurrTag->EnclosedTag->S.P+CurrTag->EnclosedTag->S.L; *p && *p!='<' && *p!='\n'; p++) len++;
+					for (p=CurrTag->EnclosedTag->S.P+CurrTag->EnclosedTag->S.L; *p && *p!='<'; p++) len++;
 				}
 				var->Value.Set(CurrTag->EnclosedTag->S.P+CurrTag->EnclosedTag->S.L, len, true);
 				var->Data = CurrTag->EnclosedTag->SourceOffset + CurrTag->EnclosedTag->S.L;
 			}else if (CurrTag->EnclosedTag){
 				len=0;
-				for (p=CurrTag->EnclosedTag->S.P+CurrTag->EnclosedTag->S.L; *p && *p!='<' && *p!='\n'; p++) len++;
+				for (p=CurrTag->EnclosedTag->S.P+CurrTag->EnclosedTag->S.L; *p && *p!='<'; p++) len++;
 				var->Value.Set(CurrTag->EnclosedTag->S.P+CurrTag->EnclosedTag->S.L, len, true);
 				var->Data = CurrTag->EnclosedTag->SourceOffset + CurrTag->EnclosedTag->S.L;
 			}else{
 				len=0;
-				for (p=CurrTag->S.P+CurrTag->S.L; *p && *p!='<' && *p!='\n'; p++) len++;
+				for (p=CurrTag->S.P+CurrTag->S.L; *p && *p!='<'; p++) len++;
 				var->Value.Set(CurrTag->S.P+CurrTag->S.L, len, true);
 				var->Data = CurrTag->SourceOffset + CurrTag->S.L;
 			}
@@ -1338,7 +1339,7 @@ int	HTQLTagSelection::setVariableValues(HTQLScope* CurrTag){
 					len=0;
 			}else{
 				len=0;
-				for (p=CurrTag->S.P+CurrTag->S.L; *p && *p!='<' && *p!='\n'; p++) len++;
+				for (p=CurrTag->S.P+CurrTag->S.L; *p && *p!='<'; p++) len++;
 			}
 			var->Value.Set(CurrTag->S.P+CurrTag->S.L, len, true);
 			var->Data = CurrTag->SourceOffset + CurrTag->S.L;
@@ -1364,9 +1365,16 @@ int	HTQLTagSelection::setVariableValues(HTQLScope* CurrTag){
 			var->Data = item.SourceOffset;
 
 		} else if (!var->Name.Cmp("st",2, false)){
-			var->Value.Set(CurrTag->S.P, CurrTag->S.L, true);
-			var->Data = CurrTag->SourceOffset;
+			if (CurrTag->TagType == HTQLTagDataSyntax::synQL_DATA){
+				HTQLScope* prev_tag = prevTag(CurrTag, false); 
+				if (!prev_tag) prev_tag = CurrTag; 
+				var->Value.Set(prev_tag->S.P, prev_tag->S.L, true);
+				var->Data = prev_tag->SourceOffset;
 
+			}else{
+				var->Value.Set(CurrTag->S.P, CurrTag->S.L, true);
+				var->Data = CurrTag->SourceOffset;
+			}
 		} else if (!var->Name.Cmp("tt",2, false)){ // includes st, et, or data
 			if (CurrTag->TagType == HTQLTagDataSyntax::synQL_DATA){
 				var->Value.Set(CurrTag->S.P, CurrTag->E.P-CurrTag->S.P, true);
