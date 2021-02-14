@@ -2,25 +2,34 @@ from distutils.core import setup, Extension
 
 from distutils.sysconfig import get_python_inc
 
+define_macros = [('MAJOR_VERSION', '1'),
+                 ('MINOR_VERSION', '0'),
+                 ('NO_WINDOWS', 1),
+                 ('NOIWEB', 1),
+                 ('NOIWIRB', 1),
+                 ('NO_PathTree', 1)
+                 ]
 import sys
 pyver_id = 'Python32'
 if sys.version_info.major < 3: 
     if sys.version_info.major == 2 and sys.version_info.minor >=6: 
         # for python 2.6 and 2.7
-        pyver_id = 'Python27'
+        define_macros.append( ('Python27', 1) )
     else:
         # for python 2.4 and 2.5
-        pyver_id = 'Python24'
+        define_macros.append( ('Python24', 1) )
+else:
+    # for python 3.0 and above
+    define_macros.append( ('Python32', 1) )
+
+if sys.platform == 'win32':
+    # for windows
+    define_macros += [('WIN32', 1),
+                      ('_AFXDLL',1),
+                     ]
 
 module1 = Extension('htql',
-            define_macros = [('MAJOR_VERSION', '1'),
-                             ('MINOR_VERSION', '0'),
-                             (pyver_id, 1),
-                             ('NO_WINDOWS', 1),
-                             ('NOIWEB', 1),
-                             ('NOIWIRB', 1),
-                             ('NO_PathTree', 1)
-                             ],
+            define_macros = define_macros,
             include_dirs = [get_python_inc() ],
             libraries = [],
             library_dirs = [],
