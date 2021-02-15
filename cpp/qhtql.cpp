@@ -2672,6 +2672,9 @@ int HTQLParser::functionTX(char* data, void* call_from, ReferData* tx){
 				if (dot_insert && p>=text.P && !strchr(sentence_symbols, *p)){
 					text+=".";
 				}
+				if (space_insert){
+					text+="\n";
+				}
 			}else if (syn.Type==HTQLTagDataSyntax::synQL_START_TAG && (i=TagOperation::isTags(syn.Sentence+syn.Start, ignore))>=0 ){
 				to_skip=i+1;
 			}else if (to_skip>0 && syn.Type==HTQLTagDataSyntax::synQL_END_TAG && TagOperation::isTags(syn.Sentence+syn.Start, ignore_end)==to_skip-1 ){
