@@ -1,0 +1,3 @@
+graft cpp/*.h 
+include cpp/py2_4.h cpp/platform.h cpp/heapsortorder.h cpp/sockheader.h cpp/tMatrix.h cpp/evalversion.h cpp/ethoerror.h
+
