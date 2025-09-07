@@ -1,6 +1,5 @@
-from distutils.core import setup, Extension
-
-from distutils.sysconfig import get_python_inc
+from setuptools import setup, Extension
+import sysconfig
 
 define_macros = [('MAJOR_VERSION', '1'),
                  ('MINOR_VERSION', '0'),
@@ -35,15 +34,36 @@ cppfiles = ['txnaivebayes.cpp', 'pybrowser.cpp', 'pyhtql.cpp', 'pyhtqlmodule.cpp
 
 module1 = Extension('htql',
             define_macros = define_macros,
-            include_dirs = [get_python_inc(), os.path.join(cwd, 'cpp') ],
+            include_dirs = [sysconfig.get_path('include'), os.path.join(cwd, 'cpp') ],
             libraries = [],
             library_dirs = [],
             sources = ["cpp/"+f for f in cppfiles],
         );
 
 setup (name = 'htql',
-       version = '1.0',
-       description = 'This is an htql package',
+       version = '1.0.0',
+       description = 'Hyper-Text Query Language for querying HTML, XML and text documents',
+       long_description = open('README.md').read(),
+       long_description_content_type = 'text/markdown',
+       author = 'Liangyou Chen',
+       author_email = 'author@example.com',
+       url = 'https://github.com/liangyouchen/htql/',
+       classifiers = [
+           'Programming Language :: Python :: 2.7',
+           'Programming Language :: Python :: 3',
+           'Programming Language :: Python :: 3.6',
+           'Programming Language :: Python :: 3.7',
+           'Programming Language :: Python :: 3.8',
+           'Programming Language :: Python :: 3.9',
+           'Programming Language :: Python :: 3.10',
+           'Programming Language :: Python :: 3.11',
+           'License :: OSI Approved :: MIT License',
+           'Operating System :: OS Independent',
+           'Topic :: Text Processing :: Markup :: HTML',
+           'Topic :: Text Processing :: Markup :: XML',
+           'Topic :: Software Development :: Libraries :: Python Modules',
+       ],
+       python_requires = '>=2.7',
        ext_modules = [module1])
 
 
