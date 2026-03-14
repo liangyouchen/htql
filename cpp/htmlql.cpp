@@ -15,7 +15,7 @@ HtmlQL::HtmlQL(){
 		Parser= 0;
 	}
 	Parser= new HtmlQLParser;
-	
+
 	HtmlQLParser::addHtmlQLFunctions(Parser);
 }
 

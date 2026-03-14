@@ -165,7 +165,7 @@ int HtNaiveBayes::loadXML(ReferData* data){
 		char* vals = ql.getValue("tx"); 
 		ReferLink* link=(ReferLink*) FeatureValues.add(name, 0, 0);
 		ReferLinkHeap* fvals = new ReferLinkHeap();
-		link->Data = (long) fvals;
+		link->Data = (intptr_t) fvals;
 		HtmlQL ql1; 
 		ql1.setSourceData(vals, strlen(vals), false);
 		ql1.setQuery("<Value>:tx &tx"); 
@@ -182,7 +182,7 @@ int HtNaiveBayes::loadXML(ReferData* data){
 		char* vals = ql.getValue("tx"); 
 		ReferLink* link=(ReferLink*) FeatureFreqdisDict.add(label, name, 0);
 		ReferLinkHeap* fvals = new ReferLinkHeap();
-		link->Data = (long) fvals;
+		link->Data = (intptr_t) fvals;
 		HtmlQL ql1; 
 		ql1.setSourceData(vals, strlen(vals), false);
 		ql1.setQuery("<Value>{tx=:tx &tx; count=:N}"); 
@@ -222,7 +222,7 @@ int HtNaiveBayes::addFreqDist(ReferData* fname, ReferData* fval, ReferData* labe
 		freq->setSortOrder(SORT_ORDER_KEY_STR_INC);
 		freq->setCaseSensitivity(true);
 		freq->setDuplication(false); 
-		link->Data = (long) freq; 
+		link->Data = (intptr_t) freq; 
 	}
 	freq = (ReferLinkHeap*) link->Data;
 	if (freq){
@@ -239,7 +239,7 @@ int HtNaiveBayes::addFeatureValue(ReferData* fname, ReferData* fval){
 	if (!link) {
 		link=FeatureValues.add(fname, 0, 0); 
 		vals=new ReferLinkHeap; 
-		link->Data = (long) vals; 
+		link->Data = (intptr_t) vals; 
 	}
 	vals= (ReferLinkHeap*) link->Data; 
 	vals->add(fval, 0, 0); 

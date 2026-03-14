@@ -1,14 +1,15 @@
 #ifndef REFER_LINK_H
 #define REFER_LINK_H
 
-#include <stddef.h> 
+#include <stddef.h>
+#include <stdint.h>
 #include "referdata.h"
 
 class ReferLink{
 public:
 	ReferData Name;
 	ReferData Value;
-	long Data;
+	intptr_t Data;
 	ReferLink* Next;
 	
 	ReferLink();
@@ -45,8 +46,8 @@ public:
 	int setSortOrder(HeapSortOrder sort_order);
 	int setCaseSensitivity(int sensitivity=true);
 
-	ReferLink* add(ReferData* name, ReferData* value, long data);
-	ReferLink* add(const char* name, const char* value, long data);
+	ReferLink* add(ReferData* name, ReferData* value, intptr_t data);
+	ReferLink* add(const char* name, const char* value, intptr_t data);
 	long add(ReferLink* list);
 	int remove(ReferLink* link); //remove a single link pointer
 	int empty();
@@ -56,8 +57,8 @@ public:
 	ReferLink* findName(const char* name);
 	ReferLink* findValue(ReferData* value);
 	ReferLink* findValue(const char* value);
-	ReferLink* findData(long data);
-	ReferLink* find(ReferData* name, ReferData* value, long data);
+	ReferLink* findData(intptr_t data);
+	ReferLink* find(ReferData* name, ReferData* value, intptr_t data);
 	ReferLink* find(ReferLink* link);
 	ReferData* getValue(const char* name);
 	ReferLink* getCurrReferLink();

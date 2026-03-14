@@ -376,7 +376,7 @@ int PDocBase::parseWordDoc(char* doc, long len, int* scores, int to_delete_short
 
 	PLinkTree* entry = new PLinkTree; //all unique links are added in entry, only repeat links are added to Entries
 	entry->NoDuplicate = true;
-	(*word_pattern)->Data = (long) entry; //word patterns of length 1
+	(*word_pattern)->Data = (intptr_t) entry; //word patterns of length 1
 	
 	PWordLink* curr_link, *firstlink;
 	//build entries for unique string of length 1
@@ -426,7 +426,7 @@ int PDocBase::parseWordDoc(char* doc, long len, int* scores, int to_delete_short
 
 		entry = new PLinkTree; //create a new entry of length
 		entry->NoDuplicate = true;
-		(*word_pattern)->Data = (long) entry;  //word patterns of length 2, ...
+		(*word_pattern)->Data = (intptr_t) entry;  //word patterns of length 2, ...
 
 		entryrecord.tree = oldentry; //search from (length-1)
 		PWordLink* firstlink1 = (PWordLink*) entryrecord.moveFirst();

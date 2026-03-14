@@ -310,7 +310,7 @@ void HtScript::reset(){
 int HtScript::registerInterface(HtScriptInterface* interf, ReferData* name){
 	ReferLink* link = ScriptInterfaces.findName(name);
 	if (link) {
-		link->Data = (long) interf;
+		link->Data = (intptr_t) interf;
 		return 1;
 	}else{
 		ReferLink* link = ScriptInterfaces.add(name, 0, (long) interf);
@@ -352,7 +352,7 @@ int HtScript::parseScript(const char* script, long len, ReferLink** first_line){
 		}
 		line->Name.Set(command.P, command.L, true);
 		if (var) {
-			line->Data = (long) var;
+			line->Data = (intptr_t) var;
 		}
 		
 		if (syntax.Type == QLSyntax::synQL_LBRACE)
@@ -462,7 +462,7 @@ int HtScript::executeSubScript(ReferLink* lines, ReferLink* def_var, ReferLink**
 					var=Variables.add(&interfvar, 0, htSC_VARIABLE);
 					var->Value.Set(var_p, (long) interf, false);
 				}
-				line->Data = (long) var;
+				line->Data = (intptr_t) var;
 			}else{ //existing variable link
 				var = (ReferLink*) line->Data;
 			}

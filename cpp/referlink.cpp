@@ -213,7 +213,7 @@ int ReferLinkHeap::take(ReferLinkHeap* from, int with_settings){
 	return 0;
 }
 
-ReferLink* ReferLinkHeap::add(const char* name, const char* value, long data){
+ReferLink* ReferLinkHeap::add(const char* name, const char* value, intptr_t data){
 	ReferLink* p = new ReferLink;
 	if (name) p->Name.Set((char*) name, strlen( name), true);
 	if (value) p->Value.Set((char*) value, strlen(value), true);
@@ -221,7 +221,7 @@ ReferLink* ReferLinkHeap::add(const char* name, const char* value, long data){
 	return insertLink(p);
 }
 
-ReferLink* ReferLinkHeap::add(ReferData* name, ReferData* value, long data){
+ReferLink* ReferLinkHeap::add(ReferData* name, ReferData* value, intptr_t data){
 	ReferLink* p = new ReferLink;
 	if (name) p->Name.Set(name->P, name->L, name->P!=0);
 	if (value) p->Value.Set(value->P, value->L, value->P!=0);
@@ -297,7 +297,7 @@ ReferData* ReferLinkHeap::getValue(const char* name){
 	}
 }
 
-ReferLink* ReferLinkHeap::findData(long data){
+ReferLink* ReferLinkHeap::findData(intptr_t data){
 	if (Heap.SortOrder != SORT_ORDER_NUM_INC && Heap.SortOrder != SORT_ORDER_NUM_DEC
 	//	&& Heap.SortOrder != SORT_ORDER_VAL_NUM_INC && Heap.SortOrder != SORT_ORDER_VAL_NUM_DEC
 		){
@@ -306,7 +306,7 @@ ReferLink* ReferLinkHeap::findData(long data){
 	LinkToFind.Data = data;
 	return (ReferLink*) Heap.find((char*) &LinkToFind, 0);
 }
-ReferLink* ReferLinkHeap::find(ReferData* name, ReferData* value, long data){
+ReferLink* ReferLinkHeap::find(ReferData* name, ReferData* value, intptr_t data){
 	if (name) LinkToFind.Name.Set(name->P, name->L, name->P!=0);
 	if (value) LinkToFind.Value.Set(value->P, value->L, value->P!=0);
 	LinkToFind.Data = data;

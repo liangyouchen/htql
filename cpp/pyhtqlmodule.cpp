@@ -219,9 +219,9 @@ PyMODINIT_FUNC PyInit_htql(void) {
 #else
     m = PyModule_Create(&htqlmodule);
 #endif
-	ModuleInstance = m; 
-    
-	if (m == NULL) 
+	ModuleInstance = m;
+
+	if (m == NULL)
 #ifdef Python27
         return;
 #else
@@ -244,9 +244,9 @@ PyMODINIT_FUNC PyInit_htql(void) {
     Py_INCREF(&TxNaiveBayes_Type);
     PyModule_AddObject(m, "NaiveBayes", (PyObject *)&TxNaiveBayes_Type);
 
-    PyObject* instance = PyObject_CallObject((PyObject*) &PyHtql_Type, 0); 
+    PyObject* instance = PyObject_CallObject((PyObject*) &PyHtql_Type, 0);
 	if (instance) {
-		PyModule_AddObject(m, "Htql", instance); 
+		PyModule_AddObject(m, "Htql", instance);
 	}
 
 #ifdef Python27

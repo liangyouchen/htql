@@ -1427,7 +1427,7 @@ ReferLink* tExprCalc::registerFunction(const char* fun_name, int (*fun)(tExprCal
 	name.Set((char*) fun_name, strlen(fun_name), false);
 	ReferLink* link = RegisteredFunctions.findName(&name);
 	if (link) {
-		link->Data = (long) fun;
+		link->Data = (intptr_t) fun;
 		link->Value.Set((char*) p, 0, false);
 	}else{
 		link = RegisteredFunctions.add(&name, 0, (long)fun);
@@ -1440,7 +1440,7 @@ ReferLink* tExprCalc::addInternalFunction(const char* fun_name, int (*fun)(tExpr
 	name.Set((char*) fun_name, strlen(fun_name), false);
 	ReferLink* link = InternalFunctions.findName(&name);
 	if (link) {
-		link->Data = (long) fun;
+		link->Data = (intptr_t) fun;
 		link->Value.Set((char*) p, 0, false);
 	}else{
 		link = InternalFunctions.add(&name, 0, (long)fun);
@@ -1720,7 +1720,7 @@ ReferLink* tExprCalc::registerObjectFunctionClass(const char* class_name, ReferL
 		link=ObjectFunctions.add(class_name, 0, 0);
 	}
 	if (link){
-		link->Data = (long) fun; 
+		link->Data = (intptr_t) fun; 
 		link->Value.P = (char*) p;
 	}
 	return link;

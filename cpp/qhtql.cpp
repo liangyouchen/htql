@@ -2317,7 +2317,7 @@ int HTQLParser::parseFunctions(){
 					Syntax.match();
 
 					*fun_para = new ReferLink;
-					(*fun_para)->Data = (long) expr;
+					(*fun_para)->Data = (intptr_t) expr;
 					fun_para = &(*fun_para)->Next;
 
 					/*
@@ -2400,7 +2400,7 @@ int HTQLParser::addHtqlFunction(char* fun_name, void* fun, char* description, HT
 	qlfun->Name=fun_name;
 	qlfun->FunItem = (int (*) (char*, void*, ReferData* ) )fun;
 	qlfun->Description.Set(description, strlen(description), true);
-	fun_link->Data = (long) qlfun;
+	fun_link->Data = (intptr_t) qlfun;
 
 	if (htql_fun){
 		*htql_fun=qlfun;
