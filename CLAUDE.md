@@ -67,3 +67,21 @@ The test suite (`tests/test_basic_regex.py`) contains comprehensive regex patter
 - Python interface supports both legacy (Python 2.6+) and modern versions
 - Build process requires C++ compiler toolchain
 - Tests can be run individually by index for debugging specific patterns
+
+## Lessons Learned
+
+### 64-bit Pointer Truncation Bug (fixed 2026-03-14)
+
+**Symptom**: `import htql` caused an access violation (segfault) in Python on Windows x64.
+
+**Root cause**: `ReferLink::Data` in `cpp/referlink.h` was declared as `long`. On Windows x64 (LLP64 model), `long` is 4 bytes but pointers are 8 bytes. Code throughout the codebase stored heap pointers with `(long) ptr` casts, silently truncating the upper 32 bits. When those values were read back as pointers, they pointed to invalid memory addresses, crashing on `delete`.
+
+**How it manifested**: `PyInit_htql` creates a default `HtmlQL` instance via `PyObject_CallObject`. The `HtmlQL` constructor builds and then destroys an `HTQLParser`, triggering `resetHtqlFunctions()` which called `delete` on a truncated pointer.
+
+**Fix**: Changed `long Data` to `intptr_t Data` in `cpp/referlink.h` (and matching method signatures in `referlink.cpp`), and changed all `(long) ptr` casts to `(intptr_t) ptr` in `docbase.cpp`, `expr.cpp`, `HtNaiveBayes.cpp`, `htscript.cpp`, `qhtql.cpp`.
+
+**Watch out for**: Any other use of `long` to store pointers elsewhere in the codebase (e.g., `links.h::Links::Data`, `stack.h::tStack::Data`) — these may have the same latent bug in code paths not yet exercised. On Windows x64, always use `intptr_t`, `Py_ssize_t`, or `void*` to store pointer values, never `long` or `int`.
+
+### Debugging C Extension Segfaults
+
+To isolate a crash in `PyInit_*`, add `fprintf(stderr, ...)` checkpoints before each `PyType_Ready` call and before `PyObject_CallObject` to identify the crashing call. Then drill into C++ constructors with the same technique.
