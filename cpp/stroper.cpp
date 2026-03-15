@@ -754,7 +754,7 @@ long tStrOp::searchDateStr(const char* start, long start_len, ReferLinkHeap* dat
 					if (d[1]<0){sep=start[pos+i]; sscanf(start+pos+i+1, "%d", &d[1]); }
 					else if (sep==start[pos+i]) sscanf(start+pos+i+1, "%d", &d[2]); 
 					else break;
-				}else if (!tStrOp::strNcmp((char*) start+pos+i, "Äê",2)){
+				}else if (!tStrOp::strNcmp((char*) start+pos+i, "ï¿½ï¿½",2)){
 					for (int j=i-1; j>=0; j--){
 						if (!tStrOp::isDigit(start[pos+j]) ){
 							sscanf(start+pos+(j+1), "%d", &d[0]); 
@@ -762,7 +762,7 @@ long tStrOp::searchDateStr(const char* start, long start_len, ReferLinkHeap* dat
 						}
 					}
 					i++;
-				}else if (!tStrOp::strNcmp((char*) start+pos+i, "ÔÂ",2)){
+				}else if (!tStrOp::strNcmp((char*) start+pos+i, "ï¿½ï¿½",2)){
 					for (int j=i-1; j>=0; j--){
 						if (!tStrOp::isDigit(start[pos+j]) ){
 							sscanf(start+pos+(j+1), "%d", &d[1]); 
@@ -770,7 +770,7 @@ long tStrOp::searchDateStr(const char* start, long start_len, ReferLinkHeap* dat
 						}
 					}
 					i++;
-				}else if (!tStrOp::strNcmp((char*) start+pos+i, "ÈÕ",2)){
+				}else if (!tStrOp::strNcmp((char*) start+pos+i, "ï¿½ï¿½",2)){
 					for (int j=i-1; j>=0; j--){
 						if (!tStrOp::isDigit(start[pos+j]) ){
 							sscanf(start+pos+(j+1), "%d", &d[2]); 
@@ -1308,8 +1308,15 @@ long tStrOp::trimCRLFSpace(const char* p, ReferData* tx, long max_len){
 long tStrOp::countWords(const char* text){
 	long count=0;
 	int in_word=false;
-	for (char* p1=(char*) text; p1&&*p1; p1++){
-		if (isalpha(*p1)||tStrOp::isDigit(*p1)||*p1=='_'){
+	for (unsigned char* p1=(unsigned char*) text; p1&&*p1; p1++){
+		if (*p1 >= 0xC0){
+			// UTF-8 lead byte: start of a multibyte character (e.g. CJK).
+			// Each multibyte character counts as one word.
+			count++;
+			in_word=false;
+		}else if (*p1 >= 0x80){
+			// UTF-8 continuation byte â€” part of the current multibyte char, skip.
+		}else if (isalpha(*p1)||tStrOp::isDigit(*p1)||*p1=='_'){
 			if (!in_word) count++;
 			in_word=true;
 		}else{
