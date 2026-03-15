@@ -313,7 +313,7 @@ int HtScript::registerInterface(HtScriptInterface* interf, ReferData* name){
 		link->Data = (intptr_t) interf;
 		return 1;
 	}else{
-		ReferLink* link = ScriptInterfaces.add(name, 0, (long) interf);
+		ReferLink* link = ScriptInterfaces.add(name, 0, (intptr_t) interf);
 		return 0;
 	}
 }

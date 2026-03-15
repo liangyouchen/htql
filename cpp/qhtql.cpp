@@ -2421,7 +2421,7 @@ HTQLFunction* HTQLParser::getHtqlFunction(ReferData* fun_name){
 			qlfun->FunItem = functionExprFunction;
 			qlfun->Description.Set("Default expression function", strlen("Default expression function"), true);
 
-			fun_link = (ReferLink*) HtqlFunctions.add(fun_name, 0, (long) qlfun); 
+			fun_link = (ReferLink*) HtqlFunctions.add(fun_name, 0, (intptr_t) qlfun);
 			return qlfun;
 		}
 	}
