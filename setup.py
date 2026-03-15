@@ -41,7 +41,7 @@ module1 = Extension('htql',
         );
 
 setup (name = 'htql',
-       version = '1.0.0',
+       version = '1.0.1',
        description = 'Hyper-Text Query Language for querying HTML, XML and text documents',
        long_description = open('README.md').read(),
        long_description_content_type = 'text/markdown',
