@@ -1031,7 +1031,7 @@ int HtmlQLParser::dumpParentChildLinear(HTQLScope* tag, const char* filename){
 	HTQLScope* t;
 	while (tag){
 		tt=stack.add("", "");
-		tt->Data=(long) tag;
+		tt->Data=(intptr_t) tag;
 		tag=get_parentTag(tag);
 	}
 	FILE* f=fopen(filename, FILE_WRITE);
@@ -2811,7 +2811,7 @@ int HtmlQLParser::findTagHtqlParent2Child(HTQLScope* lpElementCollection, HTQLSc
 				//for special next query
 				n1="tx";
 				get_tagAttribute(tags[j], &n1, &val_tx);
-				char* nextchar[]={"Next", "Prev", "Previous", "ÏÂÒ»Ò³","ÉÏÒ»Ò³","ÏÂÒ³","ÉÏÒ³", ">>", "<<", "&gt;&gt;", "&lt;&lt;",0};
+				char* nextchar[]={"Next", "Prev", "Previous", "ï¿½ï¿½Ò»Ò³","ï¿½ï¿½Ò»Ò³","ï¿½ï¿½Ò³","ï¿½ï¿½Ò³", ">>", "<<", "&gt;&gt;", "&lt;&lt;",0};
 				//find exact match
 				//for (k=0; !attributes[k] || n1.Cmp(attributes[k], strlen(attributes[k]),false); k++);
 				for (l=0; nextchar[l]; l++){

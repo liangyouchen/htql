@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #ifndef True
 #define True		1
@@ -18,20 +19,20 @@ public:
 	int Type;
 	char *Value;
 	char *Key;
-	long Data;
+	intptr_t Data;
 	tStack *Next;
 	tStack* add(const char* OneKey,const char* TheValue, int AddToTail=False);
-	tStack* set(long TheData,const char* OneKey,const char* TheValue);
+	tStack* set(intptr_t TheData,const char* OneKey,const char* TheValue);
 	char* newKey(const char* OneKey, long len=0);
 	char* newValue(const char* TheValue,long len=0);
 	int match(const char* OneKey);
 	tStack* search(const char* OneKey,char**ValuePointer);
-	tStack* search(long TheData);
+	tStack* search(intptr_t TheData);
 	tStack* searchNext(const char* OneKey,char**ValuePointer);
 	tStack();
 	int reset();
 	tStack(char* OneKey, char* TheValue);
-	tStack(int StackType, long TheData, const char* OneKey, const char* TheValue);
+	tStack(int StackType, intptr_t TheData, const char* OneKey, const char* TheValue);
 	~tStack();
 };
 

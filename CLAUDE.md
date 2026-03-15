@@ -80,7 +80,7 @@ The test suite (`tests/test_basic_regex.py`) contains comprehensive regex patter
 
 **Fix**: Changed `long Data` to `intptr_t Data` in `cpp/referlink.h` (and matching method signatures in `referlink.cpp`), and changed all `(long) ptr` casts to `(intptr_t) ptr` in `docbase.cpp`, `expr.cpp`, `HtNaiveBayes.cpp`, `htscript.cpp`, `qhtql.cpp`.
 
-**Watch out for**: Any other use of `long` to store pointers elsewhere in the codebase (e.g., `links.h::Links::Data`, `stack.h::tStack::Data`) — these may have the same latent bug in code paths not yet exercised. On Windows x64, always use `intptr_t`, `Py_ssize_t`, or `void*` to store pointer values, never `long` or `int`.
+**Watch out for**: The same bug existed in two more `Data` fields confirmed by later testing (see below): `tStack::Data` in `stack.h` and `ReferLinkNamedHeap::createHeap` in `referlink.cpp`. Also `htbrowser.cpp` stored `HtBrowserCookieItem*` in `ReferLink::Data` via `(long)`. On Windows x64, always use `intptr_t`, `Py_ssize_t`, or `void*` to store pointer values, never `long` or `int`.
 
 ### Incomplete Pointer-Truncation Fixes (fixed 2026-03-14)
 
@@ -96,6 +96,23 @@ The test suite (`tests/test_basic_regex.py`) contains comprehensive regex patter
 **Lesson**: When fixing pointer-truncation, search for **all** `(long) ptr` casts that feed into `ReferLink::Data` — both direct assignments (`link->Data = ...`) and indirect ones via `.add()` arguments. The compiler gives no warning because `intptr_t` is implicitly widened from the already-truncated `long`.
 
 **How to search**: `grep -rn "(long)" cpp/*.cpp | grep "\.add("` — inspect every result where the argument is a pointer, not an arithmetic value.
+
+### `tStack::Data` and `ReferLinkNamedHeap` Pointer Truncation (fixed 2026-03-14)
+
+**Symptom**: `htql.RegEx().setNameSet(name, list)` caused an access violation for any non-empty list.
+
+**Root cause**: Two more `long` pointer-storage sites were found:
+1. `referlink.cpp` — `ReferLinkNamedHeap::createHeap` stored a newly allocated `ReferLinkHeap*` with `link->Data=(long) set`. When retrieved via `(ReferLinkHeap*) link->Data`, the upper 32 bits were zero, giving an invalid address.
+2. `stack.h` — `tStack::Data` was declared `long`. `qhtmlql.cpp` stored `HTQLScope*` pointers in it via `tt->Data=(long) tag`. `htbrowser.cpp` stored `HtBrowserCookieItem*` via `link->Data=(long) item` (where `link` is a `ReferLink`).
+
+**Fix**:
+- `referlink.cpp:376`: `link->Data=(long) set` → `(intptr_t) set`
+- `stack.h`: `long Data` → `intptr_t Data`; updated `set()`, `search()`, and constructor signatures
+- `stack.cpp`: updated 3 matching method implementations to use `intptr_t TheData`
+- `htbrowser.cpp`: 3 occurrences of `link->Data=(long) item` → `(intptr_t) item`
+- `qhtmlql.cpp:1034`: `tt->Data=(long) tag` → `(intptr_t) tag`
+
+**How to search for remaining occurrences**: `grep -rn "Data=(long)" cpp/*.cpp` — any result where the RHS is a pointer (not an arithmetic literal) is a bug.
 
 ### Installed Package Shadows Inplace Build
 

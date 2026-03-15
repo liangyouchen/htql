@@ -373,7 +373,7 @@ ReferLinkHeap* ReferLinkNamedHeap::createHeap(const char* name, int case_sensiti
 		set->setCaseSensitivity(case_sensitive);
 		set->setDuplication(duplicate);
 		set->setSortOrder(sort_type);
-		link->Data=(long) set;
+		link->Data=(intptr_t) set;
 	}
 	return (ReferLinkHeap*) link->Data;
 }

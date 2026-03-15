@@ -174,7 +174,7 @@ int HtBrowser::setHeader(const char* name, const char* value){
 			item->Name=name;
 			item->Value=value;
 			link=new ReferLink;
-			link->Data=(long) item;
+			link->Data=(intptr_t) item;
 			link->Next=SessionCookies.Next;
 			SessionCookies.Next=link;
 		}
@@ -219,7 +219,7 @@ int HtBrowser::setVariable(const char* name, const char* value){
 			item->Name=name;
 			item->Value=value;
 			link=new ReferLink;
-			link->Data=(long) item;
+			link->Data=(intptr_t) item;
 			link->Next=SessionCookies.Next;
 			SessionCookies.Next=link;
 		}
@@ -273,7 +273,7 @@ int HtBrowser::setCookie(const char* name, const char* value, const char* host_u
 			item->Value=value;
 			item->Host=host_url;
 			link=new ReferLink;
-			link->Data=(long) item;
+			link->Data=(intptr_t) item;
 			link->Next=SessionCookies.Next;
 			SessionCookies.Next=link;
 		}

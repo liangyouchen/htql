@@ -38,7 +38,7 @@ tStack::tStack(char *OneKey, char* TheValue){
 	
 }
 
-tStack::tStack(int StackType, long TheData, const char* OneKey, const char* TheValue)
+tStack::tStack(int StackType, intptr_t TheData, const char* OneKey, const char* TheValue)
 {
 	Key=NULL;
 	Value=NULL;
@@ -105,7 +105,7 @@ tStack* tStack::add(const char* OneKey, const char* TheValue, int AddToTail){
 	return newStack;
 }
 
-tStack* tStack::set(long TheData, const char* OneKey, const char* TheValue){
+tStack* tStack::set(intptr_t TheData, const char* OneKey, const char* TheValue){
 	tStack* newStack=NULL;
 	tStack* tmp;
 	if (Type == ordFILO || Type == ordFIFO){
@@ -213,7 +213,7 @@ tStack* tStack::search(const char* OneKey, char** ValuePointer){
 	return NULL;
 }
 
-tStack* tStack::search(long TheData){
+tStack* tStack::search(intptr_t TheData){
 //	*ValuePointer=NULL;
 	PreSearch=Next;
 	while (PreSearch){
