@@ -108,7 +108,7 @@ char* HTQL::setUrl(const char* url, unsigned int* Length){
 		if (Html->fetchHtml(Parser->SourceUrl.P) <0 ) return NULL;
 		setSourceData(Html->Buffer.Data, Html->Buffer.DataLen, false);
 	}else{
-		if (postUrl() <0 ) return NULL;
+		if (postUrl() == NULL ) return NULL;
 	}
 	 
 	return Html->Buffer.Data;
